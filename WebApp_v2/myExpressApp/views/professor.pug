@@ -1,0 +1,66 @@
+extends layout
+block content
+
+  //.jumbotron.tinted
+    .container.text-center
+      span.overlay
+        span.spacer
+        span.title #{title}
+        span.spacer
+        br
+        span.spacer
+        span.jumbotron-text Making sign in sheets a thing of the past.
+        span.spacer
+
+  .container-fluid
+    h3 Courses
+    .row
+      .col-lg-3.profCourses
+        button.button-round.button-purple(value="SOC119", onclick="populateTable(this.value)") SOC 119
+      //each elem, index in course
+        .col-lg-3.profCourses
+          button.button-round.button-purple(value=courseID[index], onclick="populateTable(this.value)", id= courseID[index]) #{elem}
+    hr
+
+    h3 Attendance data
+
+    section.table-responsive#tableData
+      table.table.table-striped.table-sm.table-hover
+        thread
+          tr
+            th.th-sm Course Name
+            th.th-sm Course ID
+            th.th-sm Student Name
+            th.th-sm Student ID
+            th.th-sm Date
+            th.th-sm TimeStamp
+        tbody
+          tr
+            td Testing Course Name
+            td 1234567890
+            td FirstName LastName
+            td abc1234
+            td 01/01/19
+            td 12:00:00
+          tr
+            td Testing Course Name
+            td 1234567890
+            td FirstName LastName
+            td abc1234
+            td 01/01/19
+            td 12:00:00
+          tr
+            td Testing Course Name
+            td 1234567890
+            td FirstName LastName
+            td abc1234
+            td 01/01/19
+            td 12:00:00
+          tr
+            td Testing Course Name
+            td 1234567890
+            td FirstName LastName
+            td abc1234
+            td 01/01/19
+            td 12:00:00  
+  

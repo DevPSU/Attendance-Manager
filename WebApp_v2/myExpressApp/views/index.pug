@@ -1,0 +1,73 @@
+doctype html
+html
+  head
+    title= title
+    //My CSS
+    link(rel="stylesheet" href="stylesheets/style.css")
+    //My JS
+    script(src="javascripts/script.js")
+
+    link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.7.1/css/all.css', integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr', crossorigin='anonymous')
+
+
+    link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous")
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+    link(rel="stylesheet" href="https://unpkg.com/mustard-ui@latest/dist/css/mustard-ui.min.css")
+
+    //Fonts and CSS Reset
+    link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css")
+
+    script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous")
+
+  nav.navbar.navbar-light.bg-light
+    a.navbar-brand.title(href='#', style="color: #7F7FFF;") BluCantaloupe 
+
+
+  body
+    .container.register
+      .row
+        .col-md-3.register-leftt
+          h3(style='border-left:3px solid #bdbdbd; color: #7F7FFF;') &nbsp; Welcome
+          p Already have an account? Log in below.
+          button(onclick="toggleLogIn()", style="font-size:14px; color: #7f7fff") LOGIN
+
+          hr
+          
+          //Sign In
+          .col-md-9#signinstuff
+            .form-group
+              input.form-control(type='text', placeholder='Email or Username *', value='')
+            .form-group
+              input.form-control(type='text', placeholder='Password *', value='')
+            a(href="/professor", style="float:right")
+              input(type='submit', name='', value='Sign In',style='color: #7f7fff')
+          br
+        .col-md-9.register-right
+          #myTabContent.tab-content
+            #home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='home-tab')
+              h3.register-heading(style='border-left:3px solid #bdbdbd; color: #7F7FFF;') &nbsp; Register as a Professor
+              .row.register-form
+                .col-md-6
+                  .form-group
+                    input.form-control(type='text', placeholder='Username *', value='')
+                  .form-group
+                    input.form-control(type='password', placeholder='Password *', value='')
+                  .form-group
+                    input.form-control(type='password', placeholder='Confirm Password *', value='')
+
+                .col-md-6
+                  .form-group
+                    input.form-control(type='text', placeholder='Email *', value='')
+                  input.btnRegister(type='submit', value='Register', style="color: #7f7fff")
+  // Footer
+  footer.page-footer.font-small.blue
+    // Copyright
+    .footer-copyright.text-center.py-3
+      | © 2018 Copyright:
+      a.footerLink(href='#')  BluCantaloupe
+    // Copyright
+
+

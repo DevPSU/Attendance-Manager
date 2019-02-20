@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+
+#signinstuff{
+  display: none;
+}
+
+body {
+  padding: 25px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+span.title{
+  color: #7F7FFF; 
+  letter-spacing: -1px;
+  font-size: 1.75em;
+  font-weight: 500;
+  font-family: 'Open Sans', sans-serif;
+}
+
+span.jumbotron-text{
+  color: #7F7FFF; 
+  letter-spacing: -1px;  
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
+}
+
+span.spacer{
+  padding:0 5px;
+}
+
+.button-purple {
+background-color:#7F7FFF;
+color: white;
+}
+
+.button-active{
+  background-color:#F4CC70;
+}
+
+.jumbotron{
+  background-image: url("../images/lecture_hall.jpg");
+  background-size: cover;
+}
+
+.tinted{
+  opacity: 0.8;
+}
+
+.jumbotron-text{
+  font-family: "Open Sans",sans-serif;
+  color: white;
+}
+
+.overlay{
+  position: relative;
+  width: 100%;
+  background: rgb(0, 0, 0); /* fallback color */
+  background: rgba(0, 0, 0, 0.7);
+  padding: 4px;
+}
+
+#tableData{
+  display: none;
+}
+
+footer{
+  background-color: white;
+}
+
+.page-footer{
+  background-color: white;
+}
+
+.footerLink{
+  color: #7F7FFF;
+}
