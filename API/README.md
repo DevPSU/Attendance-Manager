@@ -16,7 +16,7 @@ pip install flask flask-migrate flask-jwt flask-bcrypt
 pi
 ```
 
-You've just installed [Flask](http://flask.pocoo.org/) and [Flask-Migrate](https://flask-migrate.readthedocs.io/)!
+You've just installed [Flask](http://flask.pocoo.org/), [Flask-Migrate](https://flask-migrate.readthedocs.io/), and some other auth tools!
 
 Next, navigate to the `app` folder (containing `Docs`, `Endpoints`, `Models`, etc) and run the following commands:
 ```
@@ -30,7 +30,7 @@ Those commands just:
 2. Created your first migrations from the models in the `Models` folder
 3. Ran your migrations to create the required database/tables/columns.
 
-Finally, navigate back to the base `Flask-Template` folder and run `main.py`. Voila!
+Finally, navigate back to the base `API` folder and run `main.py`. Voila!
 
 ## Usage
 
