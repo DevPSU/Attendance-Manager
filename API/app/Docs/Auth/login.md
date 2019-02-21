@@ -29,7 +29,7 @@
         "first_name": [string:max(64)],
         "last_name": [string:max(64)],
         "email": [string:max(128)],
-        "secret_key": [string:128],
+        "bearer_token": [string],
         "expires_at": [date_time:optional]
 	}
 	```
