@@ -17,10 +17,7 @@ class User(db.Model):
     modified_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
     expires_at = db.Column(db.DateTime)
 
-    def __init__(self, id=None, first_name=None, last_name=None, email=None, password_hash=None):
-        if id is not None:
-            self.id = id
-
+    def __init__(self, first_name=None, last_name=None, email=None, password_hash=None):
         if first_name is not None:
             self.first_name = first_name
 

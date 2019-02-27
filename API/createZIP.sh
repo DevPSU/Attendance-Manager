@@ -9,6 +9,11 @@ if [ "$1" == "help" ] || [ "$1" == "-help" ] || [ "$1" == "--help" ] || [ -z "$1
     exit 0
 fi
 
+# Make sure pip packages are up-to-date
+source ./venv/bin/activate
+pip freeze > requirements.txt
+deactivate
+
 if [ -z "$2" ]; then
     echo "You must provide a filename."
     exit -1
@@ -25,4 +30,4 @@ else
     REMOVE="production"
 fi
 
-zip -r $2.zip . -x "venv/*" -x ".git*" -x ".gitignore" -x "__MACOSX*" -x "Clubtalk/storyclip-db.sqlite" -x ".ebextensions/$REMOVE-*.config" -x "createZIP.sh"
+zip -r $2.zip . -x "venv/*" -x ".git*" -x ".gitignore" -x "__MACOSX*" -x "app/$REMOVE-db.sqlite" -x ".ebextensions/$REMOVE-*.config" -x "createZIP.sh"
