@@ -1,5 +1,6 @@
 from functools import wraps
 from flask import Blueprint, request, jsonify
+from sqlalchemy import or_
 
 from ..Models import db
 from ..Models.User import User
@@ -34,7 +35,7 @@ def require_logged_in(func):
 
         user = User.query.filter(User.id == jwt_data['id'],
                                  User.secret_key == jwt_data['key'],
-                                 User.expires_at > datetime.now()).first()
+                                 or_(User.expires_at > datetime.now(), User.expires_at == None)).first()
         if user is None:
             return error_json("You are unauthorized to make this request.", 401)
 

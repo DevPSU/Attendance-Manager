@@ -15,7 +15,7 @@ class Role(db.Model):
     name = db.Column(db.String(64), nullable=False, server_default='')
     item_id = db.Column(db.Integer)
     item_type = db.Column(db.String)
-    users = db.relationship('User', secondary=roles_users, backref='roles', lazy=True)
+    users = db.relationship('User', secondary=roles_users, backref=db.backref('roles', lazy='dynamic'))
     created_at = db.Column(db.DateTime, default=db.func.now())
     modified_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 

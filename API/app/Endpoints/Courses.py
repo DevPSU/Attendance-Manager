@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 
 from ..Models import db
+from ..Models.User import User
 from ..Models.Course import Course
 from ..Models.Role import Role
 from ..app import error_json
@@ -25,8 +26,8 @@ def create_course():
     db.session.add(new_course)
     db.session.commit()
 
-    # Add user as owner of course
-    new_role = Role(name="owner")
+    # Add user as professor of course
+    new_role = Role(name="Professor")
     new_role.item_id = new_course.id
     new_role.item_type = new_course.__tablename__
     new_role.users.append(user)
@@ -34,15 +35,7 @@ def create_course():
     db.session.add(new_role)
     db.session.commit()
 
-    json = {
-        "id": new_course.id,
-        "name": new_course.name,
-        "start_date": str(new_course.start_date),
-        "end_date": str(new_course.end_date),
-        "start_time": str(new_course.start_time),
-        "end_time": str(new_course.end_time),
-        "days_of_week": new_course.days_of_week.split('.')
-    }
+    json = new_course.to_dict()
 
     return jsonify(json), 200
 
@@ -96,3 +89,24 @@ def create_course_validator(data):
                   start_time=start_time,
                   end_time=end_time,
                   days_of_week=days_of_week)
+
+
+@courses.route("/", methods=["GET"])
+@require_logged_in
+def my_courses():
+    user = request.user
+
+    my_courses_roles = db.session.query(Course, Role).\
+        join(User.roles).filter(Role.item_type == 'courses', User.id == user.id).all()
+
+    json = {'count': len(my_courses_roles)}
+    if len(my_courses_roles) > 0:
+        my_courses = []
+        for course_role in my_courses_roles:
+            course = course_role[0].to_dict()
+            course['role'] = course_role[1].name
+            my_courses.append(course)
+
+        json['courses'] = my_courses
+
+    return jsonify(json), 200

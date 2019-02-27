@@ -35,3 +35,16 @@ class Course(db.Model):
 
         if days_of_week is not None:
             self.days_of_week = days_of_week
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "start_date": str(self.start_date),
+            "end_date": str(self.end_date),
+            "start_time": str(self.start_time),
+            "end_time": str(self.end_time),
+            "days_of_week": self.days_of_week.split('.'),
+            "created_at": str(self.created_at),
+            "modified_at": str(self.modified_at)
+        }
