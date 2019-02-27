@@ -17,15 +17,15 @@ auth = Blueprint('auth', __name__, url_prefix="/auth")
 def require_logged_in(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        if request.method == 'POST':
-            data = request.get_json()
-        else:
-            data = request.args
+        auth_header = request.headers.get('Authorization')
+        if auth_header is None:
+            return error_json("You must include a valid token with this request.", 400)
 
-        bearer_token = data.get('bearer_token')
+        bearer_token_match = re.match('^Bearer\s+(.*)', auth_header.strip())
+        if not bearer_token_match:
+            return error_json("You must include a valid token with this request.", 401)
 
-        if bearer_token is None:
-            return error_json("You must include a bearer token with this request.", 400)
+        bearer_token = bearer_token_match.group(1)
 
         try:
             jwt_data = jwt.decode(bearer_token.encode(), application.secret_key, algorithms='HS256')
@@ -91,7 +91,7 @@ def register():
 
     password_hash = bcrypt.generate_password_hash(password, rounds=13).decode('utf-8')
     # Erase plaintext password for security
-    password = None
+    del password
 
     new_user = User(first_name=first_name, last_name=last_name, email=email, password_hash=password_hash)
 
