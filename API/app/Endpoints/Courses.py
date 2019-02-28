@@ -3,6 +3,7 @@ from flask import Blueprint, request, jsonify
 from ..Models import db
 from ..Models.User import User
 from ..Models.Course import Course
+from ..Models.Schedule import Schedule
 from ..Models.Role import Role
 from ..app import error_json
 from .Auth import require_logged_in
@@ -19,12 +20,16 @@ ALLOWED_DAYS_OF_WEEK = ['M', 'TU', 'W', 'TH', 'F', 'SA', 'SU']
 def create_course():
     user = request.user
 
-    new_course = create_course_validator(request.get_json())
+    new_course, new_schedule = create_course_validator(request.get_json())
     if not isinstance(new_course, Course):
         return new_course
 
     db.session.add(new_course)
     db.session.commit()
+
+    # Add schedule for course
+    new_schedule.course_id = new_course.id
+    db.session.add(new_schedule)
 
     # Add user as professor of course
     new_role = Role(name="Professor")
@@ -36,6 +41,8 @@ def create_course():
     db.session.commit()
 
     json = new_course.to_dict()
+    # Adds schedule information to dict
+    json.update(new_schedule.to_dict())
 
     return jsonify(json), 200
 
@@ -83,12 +90,12 @@ def create_course_validator(data):
         return error_json("The days of the week are formatted incorrectly.", 400)
     days_of_week = '.'.join(days_of_week)
 
-    return Course(name=name,
-                  start_date=start_date,
-                  end_date=end_date,
-                  start_time=start_time,
-                  end_time=end_time,
-                  days_of_week=days_of_week)
+    return Course(name=name), Schedule(type="weekly",
+                                       start_date=start_date,
+                                       end_date=end_date,
+                                       start_time=start_time,
+                                       end_time=end_time,
+                                       days_of_week=days_of_week)
 
 
 @courses.route("/", methods=["GET"])
@@ -96,17 +103,19 @@ def create_course_validator(data):
 def my_courses():
     user = request.user
 
-    my_courses_roles = db.session.query(Course, Role).\
+    my_courses_roles = db.session.query(Course, Schedule, Role).\
         join(User.roles).filter(Role.item_type == 'courses', User.id == user.id).all()
 
     json = {'count': len(my_courses_roles)}
     if len(my_courses_roles) > 0:
-        my_courses = []
+        my_courses_list = []
         for course_role in my_courses_roles:
             course = course_role[0].to_dict()
-            course['role'] = course_role[1].name
-            my_courses.append(course)
+            course.update(course_role[1].to_dict())
+            course['role'] = course_role[2].name
 
-        json['courses'] = my_courses
+            my_courses_list.append(course)
+
+        json['courses'] = my_courses_list
 
     return jsonify(json), 200
