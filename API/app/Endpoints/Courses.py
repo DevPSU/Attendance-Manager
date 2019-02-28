@@ -40,9 +40,7 @@ def create_course():
     db.session.add(new_role)
     db.session.commit()
 
-    json = new_course.to_dict()
-    # Adds schedule information to dict
-    json.update(new_schedule.to_dict())
+    json = new_course.to_dict(role=new_role, schedule=new_schedule)
 
     return jsonify(json), 200
 
@@ -103,19 +101,39 @@ def create_course_validator(data):
 def my_courses():
     user = request.user
 
-    my_courses_roles = db.session.query(Course, Schedule, Role).\
+    my_courses_roles = db.session.query(Course, Role, Schedule).\
         join(User.roles).filter(Role.item_type == 'courses', User.id == user.id).all()
 
     json = {'count': len(my_courses_roles)}
     if len(my_courses_roles) > 0:
         my_courses_list = []
         for course_role in my_courses_roles:
-            course = course_role[0].to_dict()
-            course.update(course_role[1].to_dict())
-            course['role'] = course_role[2].name
+            course, role, schedule = course_role
+
+            course = course.to_dict(role=role, schedule=schedule)
 
             my_courses_list.append(course)
 
         json['courses'] = my_courses_list
+
+    return jsonify(json), 200
+
+
+@courses.route("/<course_id>", methods=["GET"])
+@require_logged_in
+def view_course(course_id):
+    user = request.user
+
+    course, schedule, role = db.session.query(Course, Schedule, Role).join(Role.users).filter(
+        Role.item_type == 'courses',
+        Role.item_id == course_id,
+        User.id == user.id,
+        Course.id == course_id
+    ).first()
+
+    if role is None:
+        return error_json("You are unauthorized to make this request.", 401)
+
+    json = course.to_dict(role=role, schedule=schedule)
 
     return jsonify(json), 200

@@ -15,10 +15,19 @@ class Course(db.Model):
         if name is not None:
             self.name = name
 
-    def to_dict(self):
-        return {
+    def to_dict(self, role=None, schedule=None):
+        course_dict = {
             "id": self.id,
             "name": self.name,
             "created_at": str(self.created_at),
             "modified_at": str(self.modified_at)
         }
+
+        if role is not None:
+            course_dict['role'] = role.name
+            # Adds schedule and role information to dict
+
+        if schedule is not None:
+            course_dict.update(schedule.to_dict())
+
+        return course_dict
