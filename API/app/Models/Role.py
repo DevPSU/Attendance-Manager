@@ -34,6 +34,12 @@ class Role(db.Model):
                                                                      User.id == user_id).scalar() is not None)
 
     @staticmethod
+    def get_role(user_id, item_type, item_id, name):
+        return Role.query.join(Role.users).filter(Role.item_type == item_type,
+                                                  Role.item_id == item_id,
+                                                  Role.name == name,
+                                                  User.id == user_id).first()
+    @staticmethod
     def get_roles(user_id, item_type, name=None):
         if name is None:
             return Role.query.join(Role.users).filter(Role.item_type == item_type,
