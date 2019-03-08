@@ -6,7 +6,7 @@ class Schedule(db.Model):
     __tablename__ = 'schedules'
     # Creating the columns of the schedule table
     id = db.Column(db.Integer, primary_key=True)
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id', ondelete='CASCADE'), nullable=False)
     type = db.Column(db.String, nullable=False, default="weekly")
     start_date = db.Column(db.Date, nullable=False, server_default='')
     end_date = db.Column(db.Date, nullable=False, server_default='')
@@ -19,6 +19,7 @@ class Schedule(db.Model):
     def __init__(self, type=None, course_id=None, start_date=None, end_date=None, start_time=None, end_time=None, days_of_week=None):
         if type is not None:
             self.type = type
+
         if course_id is not None:
             self.course_id = course_id
 

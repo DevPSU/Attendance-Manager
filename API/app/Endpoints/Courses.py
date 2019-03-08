@@ -101,21 +101,23 @@ def create_course_validator(data):
 def my_courses():
     user = request.user
 
-    my_courses_roles = db.session.query(Course, Role, Schedule).\
-        join(User.roles).filter(Role.item_type == 'courses', User.id == user.id).all()
+    # Get all of our user roles for the courses table
+    roles = Role.get_roles(user.id, 'courses')
 
-    json = {'count': len(my_courses_roles)}
-    if len(my_courses_roles) > 0:
-        my_courses_list = []
-        for course_role in my_courses_roles:
-            course, role, schedule = course_role
+    json = {'count': len(roles)}
+    if len(roles) > 0:
+        course_ids = [role.item_id for role in roles]
+        courses = Course.query.filter(Course.id.in_(course_ids)).all()
 
-            course = course.to_dict(role=role, schedule=schedule)
+        my_courses = []
+        for i in range(len(courses)):
+            role = roles[i]
+            course = courses[i]
+            course = course.to_dict(role=role, schedule=course.schedules[0])
 
-            my_courses_list.append(course)
+            my_courses.append(course)
 
-        json['courses'] = my_courses_list
-
+        json['courses'] = my_courses
     return jsonify(json), 200
 
 
@@ -135,5 +137,26 @@ def view_course(course_id):
         return error_json("You are unauthorized to make this request.", 401)
 
     json = course.to_dict(role=role, schedule=schedule)
+
+    return jsonify(json), 200
+
+
+@courses.route("/<course_id>", methods=["DELETE"])
+@require_logged_in
+def delete_course(course_id):
+    user = request.user
+
+    # HARD-CODED: Must be a 'Professor' role to delete a course
+    if not Role.has_role(user.id, 'courses', course_id, 'Professor'):
+        return error_json("You are unauthorized to make this request.", 401)
+
+    # Delete roles associated with course since roles are polymorphic
+    Role.delete('courses', course_id)
+    # Delete course itself (automatically deletes schedules using cascading)
+    Course.query.filter_by(id=course_id).delete()
+
+    db.session.commit()
+
+    json = {"deleted": 1}
 
     return jsonify(json), 200

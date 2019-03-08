@@ -7,7 +7,7 @@ class Course(db.Model):
     # Creating the columns of the course table
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False, server_default='')
-    schedules = db.relationship('Schedule', backref='course', lazy=True)
+    schedules = db.relationship('Schedule', passive_deletes=True, backref='course', lazy=True)
     created_at = db.Column(db.DateTime, default=db.func.now())
     modified_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 

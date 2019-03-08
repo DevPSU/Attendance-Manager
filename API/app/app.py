@@ -6,6 +6,9 @@ import os
 import configparser
 import importlib
 
+from sqlalchemy.engine import Engine
+from sqlalchemy import event
+
 def error_json(error, error_code):
     return jsonify({'error': error}), error_code
 
@@ -32,6 +35,13 @@ if appenv != 'development' and appenv is not None:
 else:
     application.secret_key = config['development']['secret']
     application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'development-db.sqlite')
+
+
+    @event.listens_for(Engine, "connect")
+    def set_sqlite_pragma(dbapi_connection, connection_record):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
 
 # Custom configurations
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
