@@ -1,0 +1,27 @@
+extends layout
+
+block content
+    h3.h3Title.color  &nbsp;  #{title}
+    if errors
+        each error, i in errors
+            .alert.alert-danger.alert-dismissible #{error.msg}
+    
+    if bool
+        .alert.alert-danger #{status}
+    if booll
+        .alert.alert-success #{status}
+
+    form(method='post',action='/users/register')
+        .form-group.col-md-3
+            label First Name
+            input.form-control(name='fname',type='text', placeholder='first name')
+        .form-group.col-md-3
+            label Last Name
+            input.form-control(name='lname',type='text', placeholder='last name')
+        .form-group.col-md-3
+            label Email
+            input.form-control(name='email',type='email', placeholder='email')
+        .form-group.col-md-3
+            label Password
+            input.form-control(name='password',type='password', placeholder='password')
+        input.btn(type='submit', name='submit', value='REGISTER', style='background-color: white; color: #FC9221; border: 1px solid #d3c9c9;')

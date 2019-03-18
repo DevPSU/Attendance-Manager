@@ -1,0 +1,17 @@
+.h3Title{
+    border-left:3px solid #d3c9c9;
+}
+
+a , .color, .footerLink{
+    color: #FC9221;
+}
+
+.coursesCol{
+    padding-bottom: 10px;
+}
+
+.borderless{
+    border: 0px transparent solid;
+    background-color: transparent;
+    color:#FC9221;
+}
