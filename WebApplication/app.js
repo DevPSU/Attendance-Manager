@@ -6,7 +6,8 @@ var logger = require('morgan');
 var session = require('express-session');
 var passport = require('passport');
 var expressValidator = require('express-validator');
-
+var session = require('express-session');
+var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -23,20 +24,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
-//Handle Sessions
-app.use(session({
-  secret:'secret',
-  saveUninitialized: true,
-  resave: true
-}))
-
 //Passport - Authentication
 app.use(passport.initialize());
 app.use(passport.session());
 
 auth = false;
+firstNameLogin = null;
+bearerToken =  null;
 
 //Validator
 app.use(expressValidator({
@@ -65,6 +59,8 @@ app.use(function (req, res, next) {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+// Use the session middleware
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

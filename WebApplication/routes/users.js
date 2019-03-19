@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var session = require('express-session');
+var bodyParser = require('body-parser');
+
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -12,6 +15,9 @@ router.get('/register', function(req, res, next) {
 
 router.get('/login', function(req, res, next) {
   res.render('login',  {title:'Login'});
+  if(auth){
+    res.redirect('/');
+  }
 });
 
 
@@ -99,14 +105,16 @@ router.post('/login', function(req, res, next) {
                  //Look into express sessions/cookies
                  auth = true;
                  bearerToken = body.bearer_token;
+                 firstNameLogin = body.first_name;
 
-                 //res.render('login',  {title:'Login', user: true, bool: false, booll:true, status: "Successful Login" });
-                 res.render('index', {title: 'Members', user: auth, name: body.first_name, bearer: body.bearer_token});
-                 //res.redirect('/')
-             }
+                 res.redirect('/');
+                 res.end();
+                }
              else{
 
                 auth = false;
+                firstNameLogin = null;
+                bearerToken =  null;
 
                 //Error code and response.
                 console.log(response.statusCode);
