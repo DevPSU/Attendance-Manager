@@ -4,15 +4,45 @@ from ..Models import db
 from ..Models.User import User
 from ..Models.Course import Course
 from ..Models.Schedule import Schedule
-from ..Models.Role import Role
+from ..Models.Role import Role, RoleName
 from ..app import error_json
 from .Auth import require_logged_in
 
 from datetime import datetime
+import string
+import random
 
 courses = Blueprint('courses', __name__, url_prefix="/courses")
 
 ALLOWED_DAYS_OF_WEEK = ['M', 'TU', 'W', 'TH', 'F', 'SA', 'SU']
+
+
+@courses.route("/join", methods=["POST"])
+@require_logged_in
+def join_course():
+    data = request.get_json()
+    user = request.user
+    enrollment_code = data.get('enrollment_code')
+
+    if enrollment_code is None:
+        return error_json("Your request is missing information.", 400)
+    if len(enrollment_code) != 8 or not enrollment_code.isalnum():
+        return error_json("Your enrollment code is invalid.", 422)
+    enrollment_code = enrollment_code.upper()
+
+    course = Course.query.filter_by(enrollment_code=enrollment_code).first()
+    if course is None:
+        return error_json("Your enrollment code is invalid.", 422)
+
+    if Role.get_role(user.id, course.__tablename__, course.id) is not None:
+        error = "You are already in this course."
+        return jsonify({'error': error}), 422
+
+    role = Role.create_role(user, course, RoleName.STUDENT)
+
+    json = course.to_dict(role=role, schedule=course.schedules[0])
+
+    return jsonify(json), 200
 
 
 @courses.route("/", methods=["POST"])
@@ -24,6 +54,13 @@ def create_course():
     if not isinstance(new_course, Course):
         return new_course
 
+    # Generate a unique course enrollment code
+    while True:
+        enrollment_code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+        if Course.query.filter_by(enrollment_code=enrollment_code).scalar() is None:
+            break
+    new_course.enrollment_code = enrollment_code
+
     db.session.add(new_course)
     db.session.commit()
 
@@ -32,7 +69,7 @@ def create_course():
     db.session.add(new_schedule)
 
     # Add user as professor of course
-    new_role = Role(name="Professor")
+    new_role = Role(name=RoleName.PROFESSOR.value)
     new_role.item_id = new_course.id
     new_role.item_type = new_course.__tablename__
     new_role.users.append(user)
@@ -192,7 +229,7 @@ def edit_course(course_id):
     user = request.user
 
     # HARD-CODED: Must be a 'Professor' role to edit a course
-    if not Role.has_role(user.id, 'courses', course_id, 'Professor'):
+    if not Role.has_role(user.id, 'courses', course_id, RoleName.PROFESSOR):
         return error_json("You are unauthorized to make this request.", 401)
 
     course = Course.query.filter_by(id=course_id).first()
@@ -203,7 +240,7 @@ def edit_course(course_id):
     if not isinstance(course, Course):
         return course
     db.session.commit()
-    role = Role.get_role(user.id, 'courses', course_id, 'Professor')
+    role = Role.get_role(user.id, 'courses', course_id)
 
     json = course.to_dict(role=role, schedule=schedule)
 
@@ -216,7 +253,7 @@ def delete_course(course_id):
     user = request.user
 
     # HARD-CODED: Must be a 'Professor' role to delete a course
-    if not Role.has_role(user.id, 'courses', course_id, 'Professor'):
+    if not Role.has_role(user.id, 'courses', course_id, RoleName.PROFESSOR):
         return error_json("You are unauthorized to make this request.", 401)
 
     # Delete roles associated with course since roles are polymorphic

@@ -7,6 +7,7 @@ class Course(db.Model):
     # Creating the columns of the course table
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), nullable=False, server_default='')
+    enrollment_code = db.Column(db.String(8))
     schedules = db.relationship('Schedule', passive_deletes=True, backref='course', lazy=True)
     created_at = db.Column(db.DateTime, default=db.func.now())
     modified_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
@@ -19,6 +20,7 @@ class Course(db.Model):
         course_dict = {
             "id": self.id,
             "name": self.name,
+            "enrollment_code": self.enrollment_code,
             "created_at": str(self.created_at),
             "modified_at": str(self.modified_at)
         }
