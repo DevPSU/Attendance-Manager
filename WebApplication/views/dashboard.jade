@@ -1,0 +1,147 @@
+extends layout
+
+block content
+  h3.h3Title.color  &nbsp; Welcome #{name}
+  br
+
+  //Courses
+  .row
+    .col-sm-8
+      .card.container-fluid.shadow
+        h4 Courses
+        .row
+          .col.coursesCol
+            button.btn.btn-primary(value="SOC119", style="background-color: #FC9221; color: white; border: #FC9221; border-radius: 20px;") SOC119
+    .col-sm-4
+      .card.container-fluid.shadow
+        h4 Courses Management
+        .row
+          .col.coursesCol
+            button.borderless(type='button', data-toggle='modal', data-target='#exampleModal00')
+              i.fas.fa-plus.fa-2x
+            button.borderless(type="button", data-toggle='modal', data-target='#exampleModal01')
+              i.fas.fa-minus.fa-2x
+            button.borderless(type="button")
+              i.fas.fa-edit.fa-2x
+            button.borderless(type="button")
+              i.fas.fa-envelope.fa-2x
+  hr
+
+  .card.shadow
+    table.table
+      thead
+        tr
+          th(scope='col') #
+          th(scope='col') Course ID
+          th(scope='col') Student Name
+          th(scope='col') Student ID
+          th(scope='col') Date
+          th(scope='col') TimeStamp
+        
+      tbody
+        tr
+          th(scope='row') 1
+          td SOC 119
+          td Josiel
+          td 1234567890
+          td 01/01/2019
+          td 00:00:01
+        tr
+          th(scope='row') 2
+          td SOC 119
+          td Nick
+          td 1234567890
+          td 01/01/2019
+          td 00:00:01
+        tr
+          th(scope='row') 3
+          td SOC 119
+          td Max
+          td 1234567890
+          td 01/01/2019
+          td 00:00:01
+        tr
+          th(scope='row') 4
+          td SOC 119
+          td Daniel
+          td 1234567890
+          td 01/01/2019
+          td 00:00:01
+  //Add Modal
+  #exampleModal00.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel00', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+      .modal-content
+        .modal-header
+          h5#exampleModalLabel00.modal-title.color Add Course
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body.container
+          form(method='post',action='/')
+            .form-group.row.justify-content-around
+              .col-sm-4 Name
+                input#inputEmail3.form-control(name="addCourseName",type='text', placeholder='Name')
+              .col-sm-4
+                &nbsp;
+            .form-group.row.justify-content-around
+              .col-sm-10 Occurrence &nbsp;
+                .form-check.form-check-inline
+                  input#gridCheck1.form-check-input(name="addOccurrence",type='checkbox')
+                  label.form-check-label(for='gridCheck1')
+                    | M
+                .form-check.form-check-inline
+                  input#gridCheck1.form-check-input(type='checkbox')
+                  label.form-check-label(for='gridCheck1')
+                    | T
+                .form-check.form-check-inline
+                  input#gridCheck1.form-check-input(type='checkbox')
+                  label.form-check-label(for='gridCheck1')
+                    | W
+                .form-check.form-check-inline
+                  input#gridCheck1.form-check-input(type='checkbox')
+                  label.form-check-label(for='gridCheck1')
+                    | Th
+                .form-check.form-check-inline
+                  input#gridCheck1.form-check-input(type='checkbox')
+                  label.form-check-label(for='gridCheck1')
+                    | F
+            .form-group.row.justify-content-around
+              .col-sm-4 Start Date
+                input.custom.form-control(name="addStartDate", type='date', value='')
+              .col-sm-4 End Date
+                input.custom.form-control(name="addEndDate", type='date', value='')
+            .form-group.row.justify-content-around
+              .col-sm-4 Start Time
+                input.custom.form-control(name="addStartTime", type='time', value='')
+              .col-sm-4 End Time
+                input.custom.form-control(name="addEndTime", type='time', value='')
+            input.btn(type='submit', name='submit', value='CREATE', style='background-color: white; color: #FC9221; border: 1px solid #d3c9c9;')
+
+            //button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            //input.btn.btn-primary(type='submit', name='submit', value='ADD COURSE',style='background-color: white; color: #FC9221; border: 1px solid #d3c9c9;') Add Courses
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary(type='submit', name='submit', value='ADD COURSE',style='background-color: white; color: #FC9221; border: 1px solid #d3c9c9;') Add Courses
+
+  //Delete Modal
+  #exampleModal01.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel01', aria-hidden='true')
+    .modal-dialog.modal-lg(role='document')
+      .modal-content
+        .modal-header
+          h5#exampleModalLabel01.modal-title.color Delete Course
+          button.close(type='button', data-dismiss='modal', aria-label='Close')
+            span(aria-hidden='true') ×
+        .modal-body.container
+          form
+            .row.justify-content-around
+              .col-4
+                .form-group
+                  label Select Course: &nbsp;
+                    select
+                      option SOC 119
+                      option Other Courses
+
+        .modal-footer
+          button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary(type='button',style='background-color: white; color: red; border: 1px solid red;') Delete Courses
+
+  include footer

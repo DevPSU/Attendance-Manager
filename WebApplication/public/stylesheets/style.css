@@ -6,8 +6,8 @@ a , .color, .footerLink{
     color: #FC9221;
 }
 
-.coursesCol{
-    padding-bottom: 10px;
+.card{
+    padding: 15px;
 }
 
 .borderless{

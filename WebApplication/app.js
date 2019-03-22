@@ -3,10 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var session = require('express-session');
 var passport = require('passport');
 var expressValidator = require('express-validator');
-var session = require('express-session');
 var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
@@ -58,9 +56,6 @@ app.use(function (req, res, next) {
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
-// Use the session middleware
-app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

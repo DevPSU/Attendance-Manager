@@ -1,10 +1,16 @@
 doctype html
 html
   head
+    
+    //Title & Icon
     title #{title}
+    link(rel='shortcut icon', type='image/x-icon', href='/Cantaloupe-UI/ios/cantaloupe-logo.ico')
+
+    //CSS-fontawesome, bootstrap
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/css/bootstrap.css')
     link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous")
+
     script(src='/javascripts/js/bootstrap.js')
     script(src='/javascripts/script.js')
   body
@@ -15,15 +21,19 @@ html
       #navbarNav.collapse.navbar-collapse
         ul.navbar-nav
           if user
-            li.nav-item(class=(title=='Members' ? 'active' : ''))
-              a.nav-link(href='/') Members
+            li.nav-item(class=(title=='Dashboard' ? 'active' : ''))
+              a.nav-link(href='/users/dashboard') Dashboard
+          if !user
+            li.nav-item(class=(title=='About' ? 'active' : ''))
+              a.nav-link(href='/') About
+        ul.navbar-nav.ml-auto
           if !user
             li.nav-item(class=(title=='Register' ? 'active' : ''))
               a.nav-link(href='/users/register') Register
             li.nav-item(class=(title=='Login' ? 'active' : ''))
               a.nav-link(href='/users/login') Login
         if user
-          ul.nav.navbar-nav.navbar-right
+          ul.nav.navbar-nav.ml-auto
             li.nav-item
               a.nav-link(href='/users/logout') Logout
     .container

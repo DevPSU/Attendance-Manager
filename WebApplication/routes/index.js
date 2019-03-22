@@ -3,8 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/',function(req, res, next) {
-  res.render('index', {title: 'Members', user: auth, name: firstNameLogin, bearer: bearerToken});
-  //res.render('index', {title: 'Members', user: auth});
+  res.render('index', {title: 'About'});
 });
 
 

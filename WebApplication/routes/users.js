@@ -20,6 +20,31 @@ router.get('/login', function(req, res, next) {
   }
 });
 
+// Use the session middleware
+router.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}))
+
+// Access the session as req.session
+router.get('/dashboard', function(req, res, next) {
+  if (req.session.views) {
+    req.session.views++
+    res.setHeader('Content-Type', 'text/html')
+    res.write('<p>views: ' + req.session.views + '</p>')
+    res.write('<p>expires in: ' + (req.session.cookie.maxAge / 1000) + 's</p>')
+    res.end()
+    console.log(res.session.view);
+  } else {
+    req.session.views = 1
+    res.end('welcome to the session demo. refresh!')
+  }
+})
+
+
+router.get('/dashboard',function(req, res, next) {
+  res.render('dashboard', {title: 'Dashboard', user: auth, name: firstNameLogin, bearer: bearerToken});
+});
+
+//---------------------------- API REQUESTS -------------------------------------------
+
 
 //Register POST
 router.post('/register', function(req, res, next) {
@@ -53,17 +78,17 @@ router.post('/register', function(req, res, next) {
                  console.log(body);
                  console.log(response.statusCode);
 
-                 res.render('register',  {title:'Register', bool: false, booll: true, status: "Successful login." });
+                 res.render('register',  {title:'Register', bool: false, booll: true, status: "Successful Register." });
 
-                 res.location('/login');
-                 res.redirect('/login');
+                 //res.redirect('/users/login');
+                 //res.end();
              }
              else{
               //Error code and response.
               console.log(response.statusCode);
               console.log(response.body);
               
-              res.render('register',  {title:'Register', bool: true, booll:false, status: "Unsuccessful login." });
+              res.render('register',  {title:'Register', bool: true, booll:false, status: "Unsuccessful Register." });
 
               }
          }
@@ -107,7 +132,7 @@ router.post('/login', function(req, res, next) {
                  bearerToken = body.bearer_token;
                  firstNameLogin = body.first_name;
 
-                 res.redirect('/');
+                 res.redirect('/users/dashboard');
                  res.end();
                 }
              else{
