@@ -21,10 +21,10 @@ router.get('/login', function(req, res, next) {
 });
 
 // Use the session middleware
-router.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}))
+//router.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}))
 
 // Access the session as req.session
-router.get('/dashboard', function(req, res, next) {
+/*router.get('/dashboard', function(req, res, next) {
   if (req.session.views) {
     req.session.views++
     res.setHeader('Content-Type', 'text/html')
@@ -36,16 +36,17 @@ router.get('/dashboard', function(req, res, next) {
     req.session.views = 1
     res.end('welcome to the session demo. refresh!')
   }
-})
+})*/
 
 
 router.get('/dashboard',function(req, res, next) {
   res.render('dashboard', {title: 'Dashboard', user: auth, name: firstNameLogin, bearer: bearerToken});
 });
 
-//---------------------------- API REQUESTS -------------------------------------------
+//--------------------------------------------- API REQUESTS ----------------------------------------------------
 
 
+//--------------------------------------------- REGISTER ----------------------------------------------------
 //Register POST
 router.post('/register', function(req, res, next) {
   var fname = req.body.fname;
@@ -96,6 +97,8 @@ router.post('/register', function(req, res, next) {
   }
 });
 
+//--------------------------------------------- LOGIN ----------------------------------------------------
+
 //Login POST
 router.post('/login', function(req, res, next) {
 
@@ -115,7 +118,6 @@ router.post('/login', function(req, res, next) {
     });
   }
   else{
-
      var request = require('request');
 
      request.post(
@@ -123,9 +125,9 @@ router.post('/login', function(req, res, next) {
          { json: { email: email ,password: password } },
          function (error, response, body) {
              if (!error && response.statusCode == 200) {
-                 console.log(body);
-                 console.log(body.bearer_token);
-                 console.log(body.first_name);
+                 //console.log(body);
+                 //console.log(body.bearer_token);
+                 //console.log(body.first_name);
                 
                  //Look into express sessions/cookies
                  auth = true;
@@ -133,6 +135,28 @@ router.post('/login', function(req, res, next) {
                  firstNameLogin = body.first_name;
 
                  res.redirect('/users/dashboard');
+
+                 console.log('Start of Get Courses API');
+
+                  //Get courses
+                  request.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses', {
+                    'Authorization': {
+                      'Bearer': bearerToken
+                    }
+                  },      
+                  function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                      console.log(body);
+                      console.log(response.statusCode);
+                      res.end();
+                    }
+                    else{
+                      console.log(body);
+                      console.log(error);
+                      res.end();
+                    }
+                  });
+
                  res.end();
                 }
              else{
@@ -142,8 +166,8 @@ router.post('/login', function(req, res, next) {
                 bearerToken =  null;
 
                 //Error code and response.
-                console.log(response.statusCode);
-                console.log(response.body);
+                //console.log(response.statusCode);
+                //console.log(response.body);
 
                 if(response.statusCode = 400)
                 {
@@ -153,7 +177,7 @@ router.post('/login', function(req, res, next) {
                   res.render('login',  {title:'Login', bool: true, booll:false, status: "401 UNAUTHORIZED Email or password do not match" });
                 }
                 else if(response.statusCode = 422){
-                  res.render('login',  {title:'Login', bool: true, booll:false, status: "422 UNPROCESSABLE ENTITY Email or password look invalid" });
+                  res.render('login',  {title:'Login', bool: true, booll:false, status: "422 UNPROCESSABLE ENTITY Email or password look invalid"});
                 }
               }
          }
@@ -161,24 +185,29 @@ router.post('/login', function(req, res, next) {
   }
 });
 
+
+//--------------------------------------------- LOGOUT ----------------------------------------------------
+
+
 router.get('/logout',function(req, res){
+  auth = false;
+  bearerToken = null;
   req.logout();
   res.redirect('/users/login');
 });
 
 
-//Create Course POST
-router.post('/', function(req, res, next) {
-  //var addCourseName = req.body.addCourseName;
-  //var addOccurrence = req.body.addOccurrence;
-  //var addStartDate = req.body.addStartDate;
-  //var addEndDate = req.body.addEndDate;
-  //var addStartTime = req.body.addStartTime;
-  //var addEndTime = req.body.addEndTime;
+//--------------------------------------------- CREATE COURSE ----------------------------------------------------
 
-  //console.log(addOccurrence);
-  console.log(bearerToken);
-  /*
+//Create Course POST
+router.post('/dashboard', function(req, res, next) {
+  var addCourseName = req.body.addCourseName;
+  var addOccurrence = req.body.addOccurrence;
+  var addStartDate = req.body.addStartDate;
+  var addEndDate = req.body.addEndDate;
+  var addStartTime = req.body.addStartTime;
+  var addEndTime = req.body.addEndTime;
+
   //For Validator
   req.checkBody('addCourseName', 'Course Name field is required').notEmpty();
   req.checkBody('addStartDate', 'Start Date field is required').notEmpty();
@@ -190,55 +219,44 @@ router.post('/', function(req, res, next) {
   var errors = req.validationErrors();
 
   if(errors){
-    res.render('/',{
+    res.render('/users/dashboard',{
       errors: errors
     });
   }
   else{
      var request = require('request');
-     console.log(bearerToken);
-    
+     var bearerTkn = bearerToken;
 
-    /*var b = b ;
-     const options = {  
-      url: 'http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses/',
-      method: 'POST',
-      headers: {
-          'Accept': 'application/json',
-          'Accept-Charset': 'utf-8',
-          'Authorization': 'Bearer' 
-      }
-  };
-  
-  request(options, function(err, res, body) {  
-      let json = JSON.parse(body);
-      console.log(json);
-  });*/
-
-     /*request.post(
+    request.post(
       'http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses/',
-         { json: { name: addCourseName, days_of_week: addOccurrence, start_time: addStartDate , end_time: addEndDate, start_date: addStartTime , end_date: addEndTime } },
-         function (error, response, body) {
-             if (!error && response.statusCode == 200) {
-                 console.log(body);
-                 console.log(response.statusCode);
-
-                 //res.render('register',  {title:'Register', bool: false, booll: true, status: "Successful login." });
-
-                 //res.location('/login');
-                 //res.redirect('/login');
-             }
-             else{
-              //Error code and response.
-              console.log(response.statusCode);
-              console.log(response.body);
-              
-              //res.render('register',  {title:'Register', bool: true, booll:false, status: "Unsuccessful login." });
-
-              }
-         }
+      { json: 
+        {
+          name: addCourseName,
+          days_of_week: addOccurrence, 
+          start_time: addStartDate, 
+          end_time: addEndDate,
+          start_date: addStartTime, 
+          end_date: addEndTime 
+        },
+        'auth':
+        {
+          'Bearer': bearerTkn
+        }
+      },
+      function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          console.log(body);
+          console.log(response.statusCode);
+          res.end();
+        }
+        else{
+          console.log(body);
+          console.log(error);
+          res.end();
+        }
+      }
      );
-}*/
+  }
 });
 
 
