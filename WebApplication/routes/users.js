@@ -21,10 +21,10 @@ router.get('/login', function(req, res, next) {
 });
 
 // Use the session middleware
-//router.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }}))
+/*router.use(session({ secret: 'mySecret_FruitSession', cookie: { maxAge: (1000*60)*30 }}))
 
 // Access the session as req.session
-/*router.get('/dashboard', function(req, res, next) {
+router.get('/dashboard', function(req, res, next) {
   if (req.session.views) {
     req.session.views++
     res.setHeader('Content-Type', 'text/html')
@@ -139,11 +139,30 @@ router.post('/login', function(req, res, next) {
                  console.log('Start of Get Courses API');
 
                   //Get courses
-                  request.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses', {
-                    'Authorization': {
-                      'Bearer': bearerToken
-                    }
-                  },      
+
+                  /*var request = require("request");
+
+                  var options = { method: 'GET',
+                    url: 'http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses',
+                    headers: {'Authorization': bearerToken }};
+                  
+                  request(options, function (error, response, body) {
+                    if (error) throw new Error(error);
+            
+                    console.log(body);
+                    console.log(bearerToken);
+                  });*/
+
+                  var unirest = require('unirest');
+                  unirest.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses')
+                  .headers({'Content-Type': 'application/json', 'Authorization': bearerToken})
+                  .end(function (response) {
+                    console.log(response.body);
+                  });
+
+                  /*request.get({url:'http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses',
+                  headers:{'Authorization': 'Bearer ' + bearerToken}
+                },      
                   function (error, response, body) {
                     if (!error && response.statusCode == 200) {
                       console.log(body);
@@ -152,10 +171,10 @@ router.post('/login', function(req, res, next) {
                     }
                     else{
                       console.log(body);
-                      console.log(error);
+                      //console.log(response);
                       res.end();
                     }
-                  });
+                  });*/
 
                  res.end();
                 }
