@@ -14,7 +14,7 @@ def error_json(error, error_code):
     return jsonify({'error': error}), error_code
 
 application = Flask(__name__)
-CORS(application)
+CORS(application, supports_credentials=True)
 bcrypt = Bcrypt(application)
 
 basedir = os.path.abspath(os.path.dirname(__file__))
