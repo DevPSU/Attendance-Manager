@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, jsonify
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 import os
 import configparser
@@ -13,6 +14,7 @@ def error_json(error, error_code):
     return jsonify({'error': error}), error_code
 
 application = Flask(__name__)
+CORS(application)
 bcrypt = Bcrypt(application)
 
 basedir = os.path.abspath(os.path.dirname(__file__))

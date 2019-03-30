@@ -34,13 +34,15 @@ def join_course():
     if course is None:
         return error_json("Your enrollment code is invalid.", 422)
 
-    if Role.get_role(user.id, course.__tablename__, course.id) is not None:
+    if Role.get_by_user(course.id, user.id) is not None:
         error = "You are already in this course."
         return jsonify({'error': error}), 422
 
-    role = Role.create_role(user, course, RoleName.STUDENT)
+    # Add the user as a student automatically
+    role_name = RoleName.STUDENT
+    Role.set(course.id, user, role_name)
 
-    json = course.to_dict(role=role, schedule=course.schedules[0])
+    json = course.to_dict(role_name=role_name, schedule=course.schedules[0])
 
     return jsonify(json), 200
 
@@ -67,17 +69,15 @@ def create_course():
     # Add schedule for course
     new_schedule.course_id = new_course.id
     db.session.add(new_schedule)
-
-    # Add user as professor of course
-    new_role = Role(name=RoleName.PROFESSOR.value)
-    new_role.item_id = new_course.id
-    new_role.item_type = new_course.__tablename__
-    new_role.users.append(user)
-
-    db.session.add(new_role)
     db.session.commit()
 
-    json = new_course.to_dict(role=new_role, schedule=new_schedule)
+    # Automatically create roles for course
+    Role.initialize(new_course.id)
+    # Add user as professor of course
+    role_name = RoleName.PROFESSOR
+    Role.set(new_course.id, user, role_name)
+
+    json = new_course.to_dict(role_name=role_name, schedule=new_schedule)
 
     return jsonify(json), 200
 
@@ -183,19 +183,19 @@ def course_validator(data, course=None):
 def my_courses():
     user = request.user
 
-    # Get all of our user roles for the courses table
-    roles = Role.get_roles(user.id, 'courses')
+    # Get all of the user's roles in in all courses
+    roles = Role.get_all_by_user(user.id)
 
     json = {'count': len(roles)}
     if len(roles) > 0:
-        course_ids = [role.item_id for role in roles]
+        course_ids = [role.course_id for role in roles]
         courses = Course.query.filter(Course.id.in_(course_ids)).all()
 
         my_courses = []
         for i in range(len(courses)):
             role = roles[i]
             course = courses[i]
-            course = course.to_dict(role=role, schedule=course.schedules[0])
+            course = course.to_dict(role_name=role.name, schedule=course.schedules[0])
 
             my_courses.append(course)
 
@@ -208,28 +208,25 @@ def my_courses():
 def view_course(course_id):
     user = request.user
 
-    course, schedule, role = db.session.query(Course, Schedule, Role).join(Role.users).filter(
-        Role.item_type == 'courses',
-        Role.item_id == course_id,
-        User.id == user.id,
-        Course.id == course_id
-    ).first()
-
+    role = Role.get_by_user(course_id, user.id)
+    # Check if they are even in the course
     if role is None:
         return error_json("You are unauthorized to make this request.", 401)
+    course = Course.query.filter_by(id=course_id).first()
+    schedule = course.schedules[0]
 
-    json = course.to_dict(role=role, schedule=schedule)
+    json = course.to_dict(role_name=role.name, schedule=schedule)
 
     return jsonify(json), 200
 
 
 @courses.route("/<course_id>", methods=["PUT"])
+@Role.requires(RoleName.PROFESSOR) # HARD-CODED: Must be a 'Professor' role to edit a course
 @require_logged_in
 def edit_course(course_id):
     user = request.user
 
-    # HARD-CODED: Must be a 'Professor' role to edit a course
-    if not Role.has_role(user.id, 'courses', course_id, RoleName.PROFESSOR):
+    if not Role.has(course_id, user.id, RoleName.PROFESSOR):
         return error_json("You are unauthorized to make this request.", 401)
 
     course = Course.query.filter_by(id=course_id).first()
@@ -237,27 +234,23 @@ def edit_course(course_id):
         return error_json("Couldn't find that course.", 404)
 
     course, schedule = course_validator(request.get_json(), course=course)
+    # If there was an error, 'course' will be the error_json package.
     if not isinstance(course, Course):
         return course
     db.session.commit()
-    role = Role.get_role(user.id, 'courses', course_id)
+    role = Role.get_by_user(course_id, user.id)
 
-    json = course.to_dict(role=role, schedule=schedule)
+    json = course.to_dict(role_name=role.name, schedule=schedule)
 
     return jsonify(json), 200
 
 
 @courses.route("/<course_id>", methods=["DELETE"])
+@Role.requires(RoleName.PROFESSOR) # HARD-CODED: Must be a 'Professor' role to delete a course
 @require_logged_in
 def delete_course(course_id):
-    user = request.user
-
-    # HARD-CODED: Must be a 'Professor' role to delete a course
-    if not Role.has_role(user.id, 'courses', course_id, RoleName.PROFESSOR):
-        return error_json("You are unauthorized to make this request.", 401)
-
-    # Delete roles associated with course since roles are polymorphic
-    Role.delete('courses', course_id)
+    # Delete all roles associated with the course
+    Role.delete_all(course_id)
     # Delete course itself (automatically deletes schedules using cascading)
     Course.query.filter_by(id=course_id).delete()
 
