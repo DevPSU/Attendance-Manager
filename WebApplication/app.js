@@ -29,6 +29,10 @@ app.use(passport.session());
 auth = false;
 firstNameLogin = null;
 bearerToken =  null;
+courses_count = null;
+courses = null;
+getCourse();
+
 
 //Validator
 app.use(expressValidator({
@@ -72,5 +76,26 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+function getCourse(){
+  console.log('Start of Get Courses API');
+
+  //Get courses
+  var unirest = require('unirest');
+  unirest.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses')
+  .headers({'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + bearerToken})
+  .end(function (response) {
+
+    global.courses_count = response.body.count;
+    global.courses = response.body.courses;
+
+    //console.log(courses_count);
+   // console.log(courses);
+    //res.render('dashboard', {title: 'Dashboard', user: auth, name: firstNameLogin, bearer: bearerToken, count: courses_count, course:courses});
+    //res.end();
+  });
+}
+
 
 module.exports = app;

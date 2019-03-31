@@ -20,27 +20,20 @@ router.get('/login', function(req, res, next) {
   }
 });
 
-// Use the session middleware
-/*router.use(session({ secret: 'mySecret_FruitSession', cookie: { maxAge: (1000*60)*30 }}))
-
-// Access the session as req.session
-router.get('/dashboard', function(req, res, next) {
-  if (req.session.views) {
-    req.session.views++
-    res.setHeader('Content-Type', 'text/html')
-    res.write('<p>views: ' + req.session.views + '</p>')
-    res.write('<p>expires in: ' + (req.session.cookie.maxAge / 1000) + 's</p>')
-    res.end()
-    console.log(res.session.view);
-  } else {
-    req.session.views = 1
-    res.end('welcome to the session demo. refresh!')
-  }
-})*/
-
-
 router.get('/dashboard',function(req, res, next) {
-  res.render('dashboard', {title: 'Dashboard', user: auth, name: firstNameLogin, bearer: bearerToken});
+  console.log('Start of Get Courses API');
+  //Get courses
+  var unirest = require('unirest');
+  unirest.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses')
+  .headers({'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + bearerToken})
+  .end(function (response) {
+
+    global.courses_count = response.body.count;
+    global.courses = response.body.courses;
+  });
+
+  
+  res.render('dashboard', {title: 'Dashboard', user: auth, name: firstNameLogin, bearer: bearerToken, count: global.courses_count, course: global.courses});
 });
 
 //--------------------------------------------- API REQUESTS ----------------------------------------------------
@@ -123,59 +116,27 @@ router.post('/login', function(req, res, next) {
      request.post(
       'http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/auth/login',
          { json: { email: email ,password: password } },
-         function (error, response, body) {
+         function (error, response, body){
              if (!error && response.statusCode == 200) {
-                 //console.log(body);
-                 //console.log(body.bearer_token);
-                 //console.log(body.first_name);
-                
+
                  //Look into express sessions/cookies
                  auth = true;
                  bearerToken = body.bearer_token;
                  firstNameLogin = body.first_name;
+                 
+                 var unirest = require('unirest');
+                 unirest.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses')
+                 .headers({'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + bearerToken})
+                 .end(function (response) {
+               
+                   courses_count = response.body.count;
+                   courses = response.body.courses;
+                 });
+               
+
+                 console.log(courses_count);
 
                  res.redirect('/users/dashboard');
-
-                 console.log('Start of Get Courses API');
-
-                  //Get courses
-
-                  /*var request = require("request");
-
-                  var options = { method: 'GET',
-                    url: 'http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses',
-                    headers: {'Authorization': bearerToken }};
-                  
-                  request(options, function (error, response, body) {
-                    if (error) throw new Error(error);
-            
-                    console.log(body);
-                    console.log(bearerToken);
-                  });*/
-
-                  var unirest = require('unirest');
-                  unirest.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses')
-                  .headers({'Content-Type': 'application/json', 'Authorization': bearerToken})
-                  .end(function (response) {
-                    console.log(response.body);
-                  });
-
-                  /*request.get({url:'http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses',
-                  headers:{'Authorization': 'Bearer ' + bearerToken}
-                },      
-                  function (error, response, body) {
-                    if (!error && response.statusCode == 200) {
-                      console.log(body);
-                      console.log(response.statusCode);
-                      res.end();
-                    }
-                    else{
-                      console.log(body);
-                      //console.log(response);
-                      res.end();
-                    }
-                  });*/
-
                  res.end();
                 }
              else{
@@ -201,8 +162,26 @@ router.post('/login', function(req, res, next) {
               }
          }
      );
+    
   }
 });
+
+function getCourse(){
+router.get('/dashboard', function getCourse(){
+  console.log('Start of Get Courses API');
+  //Get courses
+  var unirest = require('unirest');
+  unirest.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses')
+  .headers({'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + bearerToken})
+  .end(function (response) {
+
+    global.courses_count = response.body.count;
+    global.courses = response.body.courses;
+    location.reload();
+  });
+})
+}
+
 
 
 //--------------------------------------------- LOGOUT ----------------------------------------------------
@@ -224,8 +203,8 @@ router.post('/dashboard', function(req, res, next) {
   var addOccurrence = req.body.addOccurrence;
   var addStartDate = req.body.addStartDate;
   var addEndDate = req.body.addEndDate;
-  var addStartTime = req.body.addStartTime;
-  var addEndTime = req.body.addEndTime;
+  var addStartTime = req.body.addStartTime + ':00';
+  var addEndTime = req.body.addEndTime + ':00';
 
   //For Validator
   req.checkBody('addCourseName', 'Course Name field is required').notEmpty();
@@ -246,35 +225,26 @@ router.post('/dashboard', function(req, res, next) {
      var request = require('request');
      var bearerTkn = bearerToken;
 
-    request.post(
-      'http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses/',
-      { json: 
-        {
-          name: addCourseName,
-          days_of_week: addOccurrence, 
-          start_time: addStartDate, 
-          end_time: addEndDate,
-          start_date: addStartTime, 
-          end_date: addEndTime 
-        },
-        'auth':
-        {
-          'Bearer': bearerTkn
-        }
-      },
-      function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          console.log(body);
-          console.log(response.statusCode);
-          res.end();
-        }
-        else{
-          console.log(body);
-          console.log(error);
-          res.end();
-        }
-      }
-     );
+     var unirest = require('unirest');
+     unirest.post('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses/')
+     .headers({'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + bearerToken})
+     .type('json')
+     .send({
+       name: addCourseName,
+       start_time: addStartTime,
+       end_time: addEndTime,
+       start_date: addStartDate,
+       end_date: addEndDate,
+       days_of_week: addOccurrence
+     })
+     .end(function (response) {
+
+      getCourse();
+       console.log(response.body);
+       console.log(courses_count);
+       res.render('dashboard', {title: 'Dashboard', user: auth, name: firstNameLogin, bearer: bearerToken, count: global.courses_count, course: global.courses});
+       res.end();
+      });
   }
 });
 

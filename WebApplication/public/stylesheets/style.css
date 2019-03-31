@@ -1,11 +1,30 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Nunito|Open+Sans');
 
 body{
-    font-family: 'Nunito', sans-serif;
+
+}
+
+.carousel-caption.d-none.d-md-block{
+    color: black;
+}
+
+.icons{
+    height: 200px;
+    width: 200px;
+}
+
+
+h1, h2, h3, h4, h5, label,.col-sm-10{
+    font-family: 'Nunito', sans-serif; 
+}
+
+p, input, button, a, li.nav-item{
+    font-family: 'Open Sans', sans-serif;
 }
 
 .h3Title{
     border-left:3px solid #d3c9c9;
+    font-family: 'Nunito', sans-serif;
 }
 
 a , .color, .footerLink{
@@ -124,3 +143,13 @@ a , .color, .footerLink{
 @media only screen and (max-width: 990px){
     .our-team{ margin-bottom: 30px; }
 }
+
+.bgimage {
+    width:100%;
+    height:500px;
+    background-image: url('/images/Cantaloupe.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size:cover;
+    background-attachment: fixed;
+  }
