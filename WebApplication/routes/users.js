@@ -28,12 +28,10 @@ router.get('/dashboard',function(req, res, next) {
   .headers({'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + bearerToken})
   .end(function (response) {
 
-    global.courses_count = response.body.count;
-    global.courses = response.body.courses;
+    courses_count = response.body.count;
+    courses = response.body.courses;
+    res.render('dashboard', {title: 'Dashboard', user: auth, name: firstNameLogin, bearer: bearerToken, count: courses_count, course: courses});
   });
-
-  
-  res.render('dashboard', {title: 'Dashboard', user: auth, name: firstNameLogin, bearer: bearerToken, count: global.courses_count, course: global.courses});
 });
 
 //--------------------------------------------- API REQUESTS ----------------------------------------------------
@@ -124,18 +122,6 @@ router.post('/login', function(req, res, next) {
                  bearerToken = body.bearer_token;
                  firstNameLogin = body.first_name;
                  
-                 var unirest = require('unirest');
-                 unirest.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses')
-                 .headers({'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + bearerToken})
-                 .end(function (response) {
-               
-                   courses_count = response.body.count;
-                   courses = response.body.courses;
-                 });
-               
-
-                 console.log(courses_count);
-
                  res.redirect('/users/dashboard');
                  res.end();
                 }
@@ -177,7 +163,6 @@ router.get('/dashboard', function getCourse(){
 
     global.courses_count = response.body.count;
     global.courses = response.body.courses;
-    location.reload();
   });
 })
 }
@@ -239,10 +224,11 @@ router.post('/dashboard', function(req, res, next) {
      })
      .end(function (response) {
 
-      getCourse();
        console.log(response.body);
+       console.log(response.body.name);
        console.log(courses_count);
-       res.render('dashboard', {title: 'Dashboard', user: auth, name: firstNameLogin, bearer: bearerToken, count: global.courses_count, course: global.courses});
+       res.redirect('/users/dashboard');
+       //res.render('dashboard', {title: 'Dashboard', user: auth, name: firstNameLogin, bearer: bearerToken, count: global.courses_count, course: response.body.name});
        res.end();
       });
   }
