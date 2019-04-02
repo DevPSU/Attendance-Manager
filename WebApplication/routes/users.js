@@ -24,7 +24,7 @@ router.get('/dashboard',function(req, res, next) {
   console.log('Start of Get Courses API');
   //Get courses
   var unirest = require('unirest');
-  unirest.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses')
+  unirest.get('https://refpv61eu7.execute-api.us-east-1.amazonaws.com/dev/courses')
   .headers({'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + bearerToken})
   .end(function (response) {
 
@@ -63,7 +63,7 @@ router.post('/register', function(req, res, next) {
      var request = require('request');
 
      request.post(
-      'http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/auth/register',
+      'https://refpv61eu7.execute-api.us-east-1.amazonaws.com/dev/auth/register',
          { json: { first_name: fname, last_name: lname, email: email ,password: password } },
          function (error, response, body) {
              if (!error && response.statusCode == 200) {
@@ -112,7 +112,7 @@ router.post('/login', function(req, res, next) {
      var request = require('request');
 
      request.post(
-      'http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/auth/login',
+      'https://refpv61eu7.execute-api.us-east-1.amazonaws.com/dev/auth/login',
          { json: { email: email ,password: password } },
          function (error, response, body){
              if (!error && response.statusCode == 200) {
@@ -157,7 +157,7 @@ router.get('/dashboard', function getCourse(){
   console.log('Start of Get Courses API');
   //Get courses
   var unirest = require('unirest');
-  unirest.get('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses')
+  unirest.get('https://refpv61eu7.execute-api.us-east-1.amazonaws.com/dev/courses')
   .headers({'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + bearerToken})
   .end(function (response) {
 
@@ -211,7 +211,7 @@ router.post('/dashboard', function(req, res, next) {
      var bearerTkn = bearerToken;
 
      var unirest = require('unirest');
-     unirest.post('http://cantaloupe-dev.us-east-1.elasticbeanstalk.com/courses/')
+     unirest.post('https://refpv61eu7.execute-api.us-east-1.amazonaws.com/dev/courses/')
      .headers({'Content-Type': 'application/json', 'Authorization' : 'Bearer ' + bearerToken})
      .type('json')
      .send({
