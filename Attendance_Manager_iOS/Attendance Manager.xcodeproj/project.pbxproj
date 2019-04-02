@@ -7,18 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52B041DE22480B27007E4F68 /* UIButton+loadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B041DD22480B27007E4F68 /* UIButton+loadingIndicator.swift */; };
+		52B041E022480C69007E4F68 /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B041DF22480C69007E4F68 /* Class.swift */; };
+		52B041E2224811D7007E4F68 /* CoursesViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B041E1224811D7007E4F68 /* CoursesViewCell.swift */; };
+		52B041E4224822CC007E4F68 /* AttendanceHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B041E3224822CC007E4F68 /* AttendanceHistoryTableViewCell.swift */; };
+		52B041E622482AFF007E4F68 /* CourseDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B041E522482AFF007E4F68 /* CourseDetailsViewController.swift */; };
+		52C522B7223ECEDB00657183 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C522B6223ECEDB00657183 /* LoginViewController.swift */; };
 		52D3845921F3D0F80075E264 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D3845821F3D0F80075E264 /* AppDelegate.swift */; };
 		52D3845B21F3D0F80075E264 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D3845A21F3D0F80075E264 /* ViewController.swift */; };
 		52D3845E21F3D0F80075E264 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52D3845C21F3D0F80075E264 /* Main.storyboard */; };
 		52D3846021F3D0F90075E264 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52D3845F21F3D0F90075E264 /* Assets.xcassets */; };
 		52D3846321F3D0F90075E264 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52D3846121F3D0F90075E264 /* LaunchScreen.storyboard */; };
+		52E694C12234AC3D00A8BD1E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E694C02234AC3D00A8BD1E /* User.swift */; };
 		52FEC4682210A70100E75318 /* CoursesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FEC4672210A70100E75318 /* CoursesViewController.swift */; };
-		52FEC46A2210AAF400E75318 /* CoursesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FEC4692210AAF400E75318 /* CoursesCell.swift */; };
-		52FEC46C2210CC8300E75318 /* CourseDescriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52FEC46B2210CC8300E75318 /* CourseDescriptionViewController.swift */; };
 		52FEC46F2210DC8100E75318 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52FEC46E2210DC8100E75318 /* MessageUI.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		52B041DD22480B27007E4F68 /* UIButton+loadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+loadingIndicator.swift"; sourceTree = "<group>"; };
+		52B041DF22480C69007E4F68 /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
+		52B041E1224811D7007E4F68 /* CoursesViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoursesViewCell.swift; sourceTree = "<group>"; };
+		52B041E3224822CC007E4F68 /* AttendanceHistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceHistoryTableViewCell.swift; sourceTree = "<group>"; };
+		52B041E522482AFF007E4F68 /* CourseDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDetailsViewController.swift; sourceTree = "<group>"; };
+		52C522B6223ECEDB00657183 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = "Attendance Manager/Controller/LoginViewController.swift"; sourceTree = SOURCE_ROOT; };
 		52D3845521F3D0F80075E264 /* Attendance Manager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Attendance Manager.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D3845821F3D0F80075E264 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52D3845A21F3D0F80075E264 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -26,9 +37,8 @@
 		52D3845F21F3D0F90075E264 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		52D3846221F3D0F90075E264 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		52D3846421F3D0F90075E264 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		52E694C02234AC3D00A8BD1E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		52FEC4672210A70100E75318 /* CoursesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoursesViewController.swift; sourceTree = "<group>"; };
-		52FEC4692210AAF400E75318 /* CoursesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoursesCell.swift; sourceTree = "<group>"; };
-		52FEC46B2210CC8300E75318 /* CourseDescriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseDescriptionViewController.swift; sourceTree = "<group>"; };
 		52FEC46E2210DC8100E75318 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -47,11 +57,11 @@
 		525A628A21FE5E500026E410 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				52FEC46B2210CC8300E75318 /* CourseDescriptionViewController.swift */,
+				52C522B6223ECEDB00657183 /* LoginViewController.swift */,
 				52D3845821F3D0F80075E264 /* AppDelegate.swift */,
 				52D3845A21F3D0F80075E264 /* ViewController.swift */,
 				52FEC4672210A70100E75318 /* CoursesViewController.swift */,
-				52FEC4692210AAF400E75318 /* CoursesCell.swift */,
+				52B041E522482AFF007E4F68 /* CourseDetailsViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -59,6 +69,8 @@
 		525A628B21FE5E6B0026E410 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				52E694C02234AC3D00A8BD1E /* User.swift */,
+				52B041DF22480C69007E4F68 /* Class.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -66,10 +78,21 @@
 		525A628C21FE5E8C0026E410 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				52D3846121F3D0F90075E264 /* LaunchScreen.storyboard */,
 				52D3845C21F3D0F80075E264 /* Main.storyboard */,
+				52B041E1224811D7007E4F68 /* CoursesViewCell.swift */,
+				52B041E3224822CC007E4F68 /* AttendanceHistoryTableViewCell.swift */,
 				52D3845F21F3D0F90075E264 /* Assets.xcassets */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		52B041DC22480AEC007E4F68 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				52B041DD22480B27007E4F68 /* UIButton+loadingIndicator.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		52D3844C21F3D0F70075E264 = {
@@ -92,10 +115,10 @@
 		52D3845721F3D0F80075E264 /* Attendance Manager */ = {
 			isa = PBXGroup;
 			children = (
+				52B041DC22480AEC007E4F68 /* Extensions */,
 				525A628C21FE5E8C0026E410 /* View */,
 				525A628A21FE5E500026E410 /* Controller */,
 				525A628B21FE5E6B0026E410 /* Model */,
-				52D3846121F3D0F90075E264 /* LaunchScreen.storyboard */,
 				52D3846421F3D0F90075E264 /* Info.plist */,
 			);
 			path = "Attendance Manager";
@@ -180,10 +203,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52FEC46A2210AAF400E75318 /* CoursesCell.swift in Sources */,
-				52FEC46C2210CC8300E75318 /* CourseDescriptionViewController.swift in Sources */,
+				52C522B7223ECEDB00657183 /* LoginViewController.swift in Sources */,
 				52D3845B21F3D0F80075E264 /* ViewController.swift in Sources */,
+				52B041E2224811D7007E4F68 /* CoursesViewCell.swift in Sources */,
 				52D3845921F3D0F80075E264 /* AppDelegate.swift in Sources */,
+				52B041E4224822CC007E4F68 /* AttendanceHistoryTableViewCell.swift in Sources */,
+				52B041E022480C69007E4F68 /* Class.swift in Sources */,
+				52E694C12234AC3D00A8BD1E /* User.swift in Sources */,
+				52B041E622482AFF007E4F68 /* CourseDetailsViewController.swift in Sources */,
+				52B041DE22480B27007E4F68 /* UIButton+loadingIndicator.swift in Sources */,
 				52FEC4682210A70100E75318 /* CoursesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

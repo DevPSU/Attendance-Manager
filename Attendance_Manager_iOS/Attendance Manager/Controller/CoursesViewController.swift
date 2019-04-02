@@ -6,41 +6,86 @@
 //  Copyright © 2019 PSU Attendance Management Team. All rights reserved.
 //
 
+import os.log
 import UIKit
 
-class CoursesViewController: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
+class CoursesViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+    
+    var classes = [Class]()
+    
+    @IBOutlet weak var coursesTableView: UITableView!
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return classes.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+     
+        let cellIdentifier = "CoursesViewCell"
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? CoursesViewCell else {
+            fatalError("The dequeued cell is not an instance of CoursesViewCell.")
+        }
+        
+        let course = classes[indexPath.row]
+        
+        cell.classNameLabel.text = course.className
+        cell.dateTimeLabel.text = course.classMeetingDays + course.classStartTime + "-" + course.classEndTime
+        
+        return cell
+    }
+    
+    private func loadSampleClasses ()
+    {
+        
+        
+        let class1 = Class(className : "ECON 102", professorFirstName : "Kevin", professorLastName : "Johnson", classMeetingDays : "MWF", classStartTime : "11:15AM", classEndTime : "12:20PM", attendanceHistory : ["February 1st" : "Present", "February 3rd" : "Absent"])
+        
+        let class2 = Class(className : "CMPEN 331", professorFirstName : "Mohamed", professorLastName : "Almekkawy", classMeetingDays : "TuTh", classStartTime : "9:05AM", classEndTime : "10:20AM", attendanceHistory : ["February 2nd" : "Present", "February 4th" : "Absent"])
+        
+        classes += [class1, class2]
+        
+    }
     
     
-    @IBOutlet weak var CoursesCollectionView: UICollectionView!
+    
+    
     @IBAction func unwindToCourses(segue: UIStoryboardSegue)
     {
         
-    }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CourseCell", for: indexPath as IndexPath) as! CoursesCell
-        cell.ClassSectionLabel.text = "Section \(indexPath.item + 1)"
-        cell.backgroundColor = UIColor.white
-        cell.layer.borderWidth = 1
-        cell.layer.cornerRadius = 15
-        cell.contentView.layer.masksToBounds = true
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.shadowOffset = CGSize(width: 0, height: 1.0)
-        cell.layer.shadowRadius = 15.0
-        cell.layer.shadowOpacity = 0.5
-        cell.layer.masksToBounds = false
-        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.contentView.layer.cornerRadius).cgPath
-        return cell
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        CoursesCollectionView.delegate = self
-        CoursesCollectionView.dataSource = self
+        loadSampleClasses()
+        coursesTableView.dataSource = self
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        if segue.identifier == "ShowClassDetails"
+        {
+            guard let courseDetailViewController = segue.destination as? CourseDetailsViewController else
+            {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            guard let selectedClassCell = sender as? CoursesViewCell else {
+                fatalError("Unexpected sender: \(sender)")
+            }
+            guard let indexPath = coursesTableView.indexPath(for: selectedClassCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            
+            let selectedClass = classes[indexPath.row]
+            courseDetailViewController.course = selectedClass
+        }
+            
+        else
+        {
+            fatalError("Unexpected Segue Identifier; \(segue.identifier)")
+        }
     }
 
     /*
