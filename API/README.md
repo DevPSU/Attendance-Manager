@@ -11,12 +11,12 @@ Clone the Git repository into your folder of choice. Navigate to that folder in 
 ```
 pip install --upgrade pip
 
-pip install flask flask-migrate flask-jwt flask-bcrypt
+pip install -r requirements
 
 pi
 ```
 
-You've just installed [Flask](http://flask.pocoo.org/), [Flask-Migrate](https://flask-migrate.readthedocs.io/), and some other auth tools!
+You've just installed [Flask](http://flask.pocoo.org/), [Flask-Migrate](https://flask-migrate.readthedocs.io/), and other important tools!
 
 Next, navigate to the `app` folder (containing `Docs`, `Endpoints`, `Models`, etc) and run the following commands:
 ```

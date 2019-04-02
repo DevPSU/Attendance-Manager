@@ -2,6 +2,7 @@ from ..Models import db
 from ..Models.User import User
 
 from flask import request
+from sqlalchemy import func
 from ..app import error_json
 
 from enum import Enum
@@ -82,6 +83,20 @@ class Role(db.Model):
                                                                      User.id == user_id).scalar() is not None)
 
     @staticmethod
+    def has_any(course_id, user_id, names):
+        role_names = []
+        for i in range(len(names)):
+            name = names[i]
+            if isinstance(name, Enum):
+                role_names.append(name.value)
+            else:
+                role_names.append(name)
+
+        return (db.session.query(Role.id).join(Role.users).filter(Role.course_id == course_id,
+                                                                     Role.name.in_(role_names),
+                                                                     User.id == user_id).scalar() is not None)
+
+    @staticmethod
     def get_by_user(course_id, user_id):
         return Role.query.join(Role.users).filter(Role.course_id == course_id,
                                                   User.id == user_id).first()
@@ -91,13 +106,31 @@ class Role(db.Model):
         return Role.query.filter_by(course_id=course_id, name=name).first()
 
     @staticmethod
+    def count_by_name(course_id, name):
+        if isinstance(name, Enum):
+            name = name.value
+
+        count = db.session.query(func.count(User.id)).join(User.roles).filter(Role.course_id == course_id,
+                                                                             Role.name == name).scalar()
+        print(count)
+        return count
+
+    @staticmethod
+    def get_all_roles_users(course_id):
+        return db.session.query(Role, User).filter(Role.course_id == course_id).join(Role.users).all()
+
+    @staticmethod
     def get_all_by_user(user_id):
         return Role.query.join(Role.users).filter(User.id == user_id).all()
 
     @staticmethod
-    def delete(course_id, user_id):
-        return Role.query.join(Role.users).filter(Role.course_id == course_id,
-                                 User.id == user_id).delete()
+    def remove_user(course_id, user):
+        role = Role.get_by_user(course_id, user.id)
+
+        role.users.remove(user)
+        db.session.commit()
+
+        return True
 
     @staticmethod
     def delete_all(course_id):
@@ -111,7 +144,14 @@ class Role(db.Model):
             def decorated_function(*args, **kwargs):
                 course_id = kwargs['course_id']
 
-                if not Role.has(course_id, request.user.id, role_name):
+                # If we have multiple role names
+                if isinstance(role_name, list):
+                    role_names = role_name
+                    has_role = Role.has_any(course_id, request.user.id, role_names)
+                else:
+                    has_role = Role.has(course_id, request.user.id, role_name)
+
+                if not has_role:
                     return error_json("You are unauthorized to make this request.", 401)
 
                 return func(*args, **kwargs)

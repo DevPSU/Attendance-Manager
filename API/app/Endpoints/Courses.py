@@ -221,8 +221,8 @@ def view_course(course_id):
 
 
 @courses.route("/<course_id>", methods=["PUT"])
-@Role.requires(RoleName.PROFESSOR) # HARD-CODED: Must be a 'Professor' role to edit a course
 @require_logged_in
+@Role.requires(RoleName.PROFESSOR) # HARD-CODED: Must be a 'Professor' role to edit a course
 def edit_course(course_id):
     user = request.user
 
@@ -246,8 +246,8 @@ def edit_course(course_id):
 
 
 @courses.route("/<course_id>", methods=["DELETE"])
-@Role.requires(RoleName.PROFESSOR) # HARD-CODED: Must be a 'Professor' role to delete a course
 @require_logged_in
+@Role.requires(RoleName.PROFESSOR) # HARD-CODED: Must be a 'Professor' role to delete a course
 def delete_course(course_id):
     # Delete all roles associated with the course
     Role.delete_all(course_id)

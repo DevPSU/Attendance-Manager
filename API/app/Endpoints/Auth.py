@@ -157,7 +157,8 @@ def login():
         "first_name": user.first_name,
         "last_name": user.last_name,
         "email": user.email,
-        "bearer_token": bearer_token
+        "bearer_token": bearer_token,
+        "success": 1
     }
     if user.expires_at is not None:
         json["expires_at"] = str(user.expires_at)

@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_cors import CORS
 
+from shutil import copyfile
 import os
 import configparser
 import importlib
@@ -35,8 +36,15 @@ if appenv != 'development' and appenv is not None:
         application.secret_key = config[appenv]['secret']
         application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://'+ username +':'+ password +'@'+ host + '/' + db + "?charset=utf8mb4"
 else:
+    sqlite_path = os.path.join(basedir, 'development-db.sqlite')
+    # Moves the sqlite db to a folder that we can read/write in Lambda
+    if os.environ.get('USING_ZAPPA') is not None:
+        src = os.path.join(basedir, 'development-db.sqlite')
+        sqlite_path = "/tmp/development-db.sqlite"
+        copyfile(src, sqlite_path)
+
     application.secret_key = config['development']['secret']
-    application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'development-db.sqlite')
+    application.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + sqlite_path
 
 
     @event.listens_for(Engine, "connect")

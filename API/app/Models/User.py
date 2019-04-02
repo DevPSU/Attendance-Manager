@@ -2,6 +2,7 @@ from ..Models import db
 import os
 import binascii
 
+from enum import Enum
 
 # Creating the user table
 class User(db.Model):
@@ -31,6 +32,23 @@ class User(db.Model):
             self.password_hash = password_hash
 
         self.secret_key = User.generate_key(64)
+
+    def to_dict(self, role_name=None):
+        user_dict = {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email
+        }
+
+        if role_name is not None:
+            if isinstance(role_name, Enum):
+                role_name = role_name.value
+
+            user_dict['role'] = role_name
+            # Adds schedule and role information to dict
+
+        return user_dict
 
     @staticmethod
     def generate_key(length):
