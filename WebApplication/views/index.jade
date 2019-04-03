@@ -1,0 +1,168 @@
+extends layout
+block content
+
+    #carouselExampleControls.carousel.slide(data-ride='carousel')
+        .carousel-inner
+            .carousel-item.active
+                img.d-block.w-100(src='/images/Cantaloupe.png', alt='First slide')
+                .carousel-caption.d-none.d-md-block
+                    h5 
+                    p 
+            .carousel-item
+                img.d-block.w-100(src='/images/Sweet_Cantaloupe.png', alt='Second slide')
+                .carousel-caption.d-none.d-md-block
+                    h5 
+                    p 
+        a.carousel-control-prev(href='#carouselExampleControls', role='button', data-slide='prev')
+            span.carousel-control-prev-icon(aria-hidden='true')
+            span.sr-only Previous
+        a.carousel-control-next(href='#carouselExampleControls', role='button', data-slide='next')
+            span.carousel-control-next-icon(aria-hidden='true')
+            span.sr-only Next
+
+
+
+        //section.jumbotron.text-center
+                h1.jumbotron-heading Attendance Management
+                p.lead.text-muted
+                | Attendance management and tracking uses a cumbersome outdated process where it becomes more inefficient as your audience grows, but Cantaloupe has a solution! 
+        
+        br
+        .container
+            h3.h3Title.color  &nbsp; Why Cantaloupe?
+            hr
+
+            .row.align-items-center
+                .col-lg-4.our-team
+                    center
+                        .rounded-circle
+                            i.fas.fa-fighter-jet.fa-7x
+                            //img.icons(src='/images/icons/easyIcon.png')
+                        h2 Fast
+                        p The Cantaloupe check in process is fast and easy! All you need is your smartphone -- no clicker, pencil or paper!
+
+                .col-lg-4.our-team
+                    center
+                        .rounded-circle
+                            i.fas.fa-shield-alt.fa-7x
+                        h2 Secure
+                        p Cantaloupe will use bluetooth technology to validate location and dual athentication for attendance check-in records. Please visit our FAQ for more details. 
+
+                .col-lg-4.our-team
+                    center
+                        .rounded-circle
+                            i.fas.fa-user-friends.fa-7x
+                        h2 Flexible
+                        p Cantaloupe offers attendance management for everyone! Professor and students are able to manage attendances for any course and extracurricular activities!
+            br
+            br
+
+            h3.h3Title.color  &nbsp; Meet the Team!
+            hr
+            // Per http://bestjquery.com/tutorial/our-team/demo74/
+            .container
+            .row
+                .col-6.col-sm-3
+                    .our-team
+                        .pic
+                            img(src='/images/team/josiel.png')
+                        ul.social
+                            li
+                                a.fab.fa-linkedin(href='#')
+                            li
+                                a.fab.far.fa-envelope(href="#")
+                        .team-content
+                            h3.title Josiel
+                            span.post Web Developer
+                .col-6.col-sm-3
+                    .our-team
+                        .pic
+                            img(src='/images/team/nick.png')
+                        ul.social
+                            li
+                                a.fab.fa-linkedin(href='#')
+                            li
+                                a.fab.far.fa-envelope(href="#")
+                        .team-content
+                            h3.title Nick
+                            span.post IOS Developer
+                .col-6.col-sm-3
+                    .our-team
+                        .pic
+                            img(src='/images/team/max.png')
+                        ul.social
+                            li
+                                a.fab.fa-linkedin(href='#')
+                            li
+                                a.fab.far.fa-envelope(href="#")
+                        .team-content
+                            h3.title Max
+                            span.post Android Developer
+
+                .col-6.col-sm-3
+                    .our-team
+                        .pic
+                            img(src='/images/team/daniel.png')
+                        ul.social
+                            li
+                                a.fab.fa-linkedin(href='#')
+                            li
+                                a.fab.far.fa-envelope(href="#")
+                        .team-content
+                            h3.title Daniel
+                            span.post Product Manager
+                .col-6.col-sm-3
+                    .our-team
+                        .pic
+                            img(src='/images/team/chris.png')
+                        ul.social
+                            li
+                                a.fab.fa-linkedin(href='#')
+                            li
+                                a.fab.far.fa-envelope(href="#")
+                        .team-content
+                            h3.title Chris
+                            span.post Backend Developer
+                .col-6.col-sm-3.ml-auto
+                    .our-team
+                        .pic
+                            img(src='/images/download.png')
+                        ul.social
+                            li
+                                a.fab.fa-linkedin(href='#')
+                            li
+                                a.fab.far.fa-envelope(href="#")
+                        .team-content
+                            h3.title Nishchay
+                            span.post Android Developer
+            br
+            br
+
+            h3.h3Title.color  &nbsp; Contact Us!
+            hr
+
+            form(method='post',action='/users/register')
+                .form-group.row.justify-content-around
+                    .col-sm-4
+                        label Name
+                        input.form-control(name='fname',type='text', placeholder='first')
+                    .col-sm-4
+                        label &nbsp;
+                        input.form-control(name='lname',type='text', placeholder='last')
+                .form-group.row.justify-content-around
+                    .col-sm-4
+                        label Email
+                        input.form-control(name='email',type='email', placeholder='email')
+                    .col-sm-4
+                        label Phone
+                        input.form-control(name='phone',type='phone', placeholder='### ### ####')        
+                .form-group.row.justify-content-around
+                    .col-sm-10
+                        label Message
+                        textarea.form-control(name='message', placeholder='')
+                .form-group.row.justify-content-around
+                    input.btn(type='submit', name='submit', value='SEND', style='background-color: white; color: #FC9221; border: 1px solid #d3c9c9;')
+
+
+            include footer
+

@@ -1,0 +1,21 @@
+//users/login
+extends layout
+block content
+    .container
+        br
+        h3.h3Title.color  &nbsp; #{title}
+        if bool
+            .alert.alert-danger #{status}
+        if booll
+            .alert.alert-success #{status}
+
+
+        form(method='post',action='/users/login')
+            .form-group.col-md-3
+                label Email
+                input.form-control(name='email',type='email', placeholder='email')
+            .form-group.col-md-3
+                label Password
+                input.form-control(name='password',type='password', placeholder='password')
+            input.btn(type='submit', name='submit', value='LOGIN', style='background-color: white; color: #FC9221; border: 1px solid #d3c9c9;')
+        include footer
