@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity
                 {
                     error.setText("");
 
-                    Intent gotoMain = new Intent(getApplicationContext(), NavigationActivity.class);
+                    Intent gotoMain = new Intent(getApplicationContext(), GymsActivity.class);
                     startActivity(gotoMain);
                 }
                 else

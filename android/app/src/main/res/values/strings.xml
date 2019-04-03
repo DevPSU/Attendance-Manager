@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Easy In</string>
+    <string name="app_name">Cantaloupe</string>
     <string name="login_banner">Login</string>
     <string name="login_button">Login</string>
     <string name="signup_button">Sign Up</string>
@@ -9,4 +9,5 @@
     <string name="courses">Courses</string>
     <string name="messages">Messages</string>
     <string name="profile">Profile</string>
+    <string name="title_activity_courses">CoursesActivity</string>
 </resources>
